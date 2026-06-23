@@ -1,0 +1,16 @@
+{
+  "encoder_id": "openai/clip-vit-large-patch14-336",
+  "llm_id": "IlyaGusev/saiga_llama3_8b",
+  "image_size": 336,
+  "load_in_4bit": true,
+  "stage": 2,
+  "init_projector_from": "solution/model/8b-stage1/projector.safetensors",
+  "mask_prompt": true,
+  "subset": 15000,
+  "epochs": 1,
+  "max_length": 768,
+  "lr": 0.0002,
+  "grad_accum": 16,
+  "train_loss": 1.1077961189660437,
+  "peak_vram_gb": 12.48
+}

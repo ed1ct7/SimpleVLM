@@ -1,0 +1,10 @@
+{
+  "encoder_id": "openai/clip-vit-large-patch14-336",
+  "llm_id": "Qwen/Qwen2-1.5B-Instruct",
+  "image_size": 336,
+  "load_in_4bit": true,
+  "subset": 2000,
+  "epochs": 1,
+  "max_length": 1024,
+  "train_loss": 1.15958744430542
+}

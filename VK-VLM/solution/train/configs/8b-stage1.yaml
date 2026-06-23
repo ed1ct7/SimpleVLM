@@ -1,0 +1,41 @@
+# VK-VLM 8B — СТАДИЯ 1 (alignment / выравнивание проектора). Рецепт LLaVA, CONTEXT §3, D1.
+# Энкодер + LLM ЗАМОРОЖЕНЫ; обучается ТОЛЬКО проектор (2-слойный MLP). Цель — научить проектор
+# мэппить визуальные фичи CLIP в пространство эмбеддингов Saiga-8b. Метрика тут не цель.
+#
+# Память (RTX 5080, 16 ГБ, sm_120): 4-bit Saiga (frozen) + bf16 проектор + grad checkpointing +
+# micro-batch=1. meta_init — без транзиентного 8B на CPU (STATE 03 #3). Подбор subset/seq — после
+# дыма (--smoke) по пику VRAM.
+
+encoder_id: openai/clip-vit-large-patch14-336   # как у эталона deepvk/llava-saiga-8b (clip, 336px, layer -2)
+llm_id: IlyaGusev/saiga_llama3_8b               # Saiga-8b (Llama-3-8B рус.), НЕ gated — база эталона deepvk
+image_size: 336
+load_in_4bit: true                              # 4-bit база (QLoRA-стиль; здесь LLM лишь заморожена)
+attn_implementation: sdpa
+seed: 42
+stage: 1                                        # alignment: только проектор
+meta_init: true                                 # скелет на meta → нет ~32 ГБ RAM транзиентно
+output_dir: solution/model/8b-stage1
+
+# проектор обучается целиком (LoRA на этой стадии не используется)
+train:
+  subset: 6000                   # фактический прогон (проектор сходится быстро: acc~0.64 к ~25 шагу).
+                                 # Полный объём: subset 109905 (~весь манифест), дольше в фоне.
+  epochs: 1
+  max_steps: -1
+  per_device_batch_size: 1       # micro-batch (VRAM-стена 16 ГБ)
+  grad_accum: 16                 # эфф. батч = 16
+  lr: 1.0e-3                     # высокий lr для warmup проектора (как stage-1 LLaVA)
+  lr_scheduler: cosine
+  warmup_ratio: 0.03
+  max_length: 768                # 576 image-токенов + текст; жёсткий потолок активаций (16 ГБ)
+  mask_prompt: false             # стадия 1: лосс по всей последовательности (warmup проектора)
+  grad_checkpointing: true
+  optim: paged_adamw_8bit
+  logging_steps: 10
+  save_strategy: "no"            # модель не PEFT → штатный чекпойнт = весь 4-bit base (~5 ГБ).
+  save_steps: 500                # вместо этого ProjectorSaveCallback кладёт только проектор (~20 МБ)
+  dataloader_workers: 4
+
+data:
+  data_root: ~/vk-vlm-data
+  manifest: ~/vk-vlm-data/processed/llava_instruct_ru.jsonl
