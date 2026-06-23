@@ -17,7 +17,7 @@ CLIP ViT-L/14-336 (336px, 576 image-токенов, layer −2, default)
 ```bash
 # окружение: venv этапа 01, в WSL2; данные/кэш — в ext4 ~/, не на /mnt
 source ~/vk-vlm-env/bin/activate
-cd /mnt/d/Fork/SimpleVLM/VK-VLM
+cd /mnt/d/Fork/SimpleVLM
 export HF_HOME=~/vk-vlm-data/hf-cache
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 

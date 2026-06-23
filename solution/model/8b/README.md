@@ -31,7 +31,7 @@
 
 ```bash
 source ~/vk-vlm-env/bin/activate
-cd /mnt/d/Fork/SimpleVLM/VK-VLM
+cd /mnt/d/Fork/SimpleVLM
 export HF_HOME=~/vk-vlm-data/hf-cache
 python solution/train/infer.py --adapters solution/model/8b --n 3
 ```

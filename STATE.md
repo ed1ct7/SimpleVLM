@@ -55,7 +55,7 @@ GPU пробрасывается в WSL: `nvidia-smi -L` → RTX 5080.
 **Артефакты:** `solution/env/check_gpu.py`, `requirements.txt`, `README.md`, `pip-freeze-full.txt`.
 **Блокеров нет.** **Разблокировано:** задача 02-data-pipeline.
 
-> Запуск проверки: `wsl -d Ubuntu-24.04 -- bash -lc "source ~/vk-vlm-env/bin/activate && python /mnt/d/Fork/SimpleVLM/VK-VLM/solution/env/check_gpu.py"`
+> Запуск проверки: `wsl -d Ubuntu-24.04 -- bash -lc "source ~/vk-vlm-env/bin/activate && python /mnt/d/Fork/SimpleVLM/solution/env/check_gpu.py"`
 > (для тренировки данные/код держать в WSL-ФС `~/`, не на `/mnt/*` — медленный I/O).
 
 ### 2026-06-22 — 02 Пайплайн данных (LLaVA-Instruct-ru + COCO) ✅

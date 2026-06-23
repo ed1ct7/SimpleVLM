@@ -66,8 +66,8 @@ dist/
 env/
 venv/
 # ...но solution/env/ — это deliverable-артефакты задания (скрипты/конфиги), не venv
-!VK-VLM/solution/env/
-!VK-VLM/solution/env/**
+!solution/env/
+!solution/env/**
 
 # Unit test / coverage reports
 htmlcov/

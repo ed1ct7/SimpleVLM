@@ -6,7 +6,7 @@
 set -euo pipefail
 
 source ~/vk-vlm-env/bin/activate
-cd /mnt/d/Fork/SimpleVLM/VK-VLM
+cd /mnt/d/Fork/SimpleVLM
 export HF_HOME=~/vk-vlm-data/hf-cache
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True   # меньше фрагментации у потолка 16 ГБ
 

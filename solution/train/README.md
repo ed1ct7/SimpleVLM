@@ -47,7 +47,7 @@ python solution/train/train.py --config solution/train/configs/8b-stage2.yaml --
 
 ```bash
 source ~/vk-vlm-env/bin/activate
-cd /mnt/d/Fork/SimpleVLM/VK-VLM
+cd /mnt/d/Fork/SimpleVLM
 
 # 0) дым (8 примеров, 2 шага) — проверить цикл без долгого прогона
 python solution/train/train.py --config solution/train/configs/2b-debug.yaml --smoke

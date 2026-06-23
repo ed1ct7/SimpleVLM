@@ -40,7 +40,7 @@ CONTEXT/`docs/datasets.md` говорят про **COCO 2014**. По факту 
 
 ```bash
 source ~/vk-vlm-env/bin/activate
-cd /mnt/d/Fork/SimpleVLM/VK-VLM        # репозиторий (код на /mnt — ок; данные — нет)
+cd /mnt/d/Fork/SimpleVLM        # репозиторий (код на /mnt — ок; данные — нет)
 
 # 1) загрузка: текстовый датасет + COCO train2014 (~13 ГБ, докачиваемо)
 python solution/data/download.py
