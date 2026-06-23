@@ -38,3 +38,19 @@
 - 8B только через **QLoRA + grad checkpointing + micro-batch**.
 - Стек ставить в **WSL2**, свежий (CUDA 12.8+, PyTorch 2.7+, Blackwell sm_120).
 - Данные — в WSL-ФС (`~/...`), не на `/mnt/c|d`.
+
+## Правила коммитов
+
+Единый стиль, **Conventional Commits**, сообщения на **английском**:
+
+- Заголовок: `type(scope): subject` — imperative, ≤ 72 символа, без точки в конце.
+  Типы: `feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `build`. Scope = область
+  (`env`, `data`, `train`, …).
+- Пустая строка, затем **тело-описание** (есть у каждого коммита): что и зачем, буллетами;
+  ключевые числа/проверки (loss, VRAM, «verified …»).
+- **Без** trailer `Co-Authored-By` / упоминаний Claude.
+- Коммитить/пушить — только когда просит пользователь. Веса/данные/токенайзеры не коммитить
+  (см. `solution/.gitignore`); в git — только код, конфиги, мета. NB: в `.gitignore`
+  **inline-комментарии не работают** — комментарий только на отдельной строке.
+
+Пример: `feat(train): VLM pipeline — 2B debug + 8B Saiga 2-stage QLoRA (tasks 03-04)`.
