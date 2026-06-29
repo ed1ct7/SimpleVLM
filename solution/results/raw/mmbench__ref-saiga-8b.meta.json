@@ -1,0 +1,13 @@
+{
+  "model": "ref-saiga-8b",
+  "label": "deepvk/llava-saiga-8b",
+  "benchmark": "mmbench",
+  "n": 3910,
+  "n_correct": 2743,
+  "accuracy": 0.7015,
+  "max_new_tokens": 8,
+  "seconds": 896.4,
+  "raw": "mmbench__ref-saiga-8b.jsonl",
+  "n_no_letter": 0,
+  "letter_rate": 1.0
+}

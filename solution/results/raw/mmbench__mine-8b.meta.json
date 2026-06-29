@@ -1,0 +1,13 @@
+{
+  "model": "mine-8b",
+  "label": "Моя 8B",
+  "benchmark": "mmbench",
+  "n": 3910,
+  "n_correct": 2232,
+  "accuracy": 0.5708,
+  "max_new_tokens": 8,
+  "seconds": 1319.8,
+  "raw": "mmbench__mine-8b.jsonl",
+  "n_no_letter": 0,
+  "letter_rate": 1.0
+}

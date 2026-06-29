@@ -1,0 +1,13 @@
+{
+  "model": "mine-2b",
+  "label": "Моя 2B",
+  "benchmark": "mmbench",
+  "n": 3910,
+  "n_correct": 1354,
+  "accuracy": 0.3463,
+  "max_new_tokens": 8,
+  "seconds": 927.7,
+  "raw": "mmbench__mine-2b.jsonl",
+  "n_no_letter": 0,
+  "letter_rate": 1.0
+}

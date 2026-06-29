@@ -1,0 +1,13 @@
+{
+  "model": "ref-gemma-2b",
+  "label": "deepvk/llava-gemma-2b-lora",
+  "benchmark": "mmbench",
+  "n": 3910,
+  "n_correct": 2463,
+  "accuracy": 0.6299,
+  "max_new_tokens": 8,
+  "seconds": 352.0,
+  "raw": "mmbench__ref-gemma-2b.jsonl",
+  "n_no_letter": 0,
+  "letter_rate": 1.0
+}

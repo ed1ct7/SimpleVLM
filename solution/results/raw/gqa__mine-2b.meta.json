@@ -1,0 +1,13 @@
+{
+  "model": "mine-2b",
+  "label": "Моя 2B",
+  "benchmark": "gqa",
+  "n": 1000,
+  "n_correct": 14,
+  "accuracy": 0.014,
+  "max_new_tokens": 16,
+  "seconds": 0.0,
+  "raw": "gqa__mine-2b.jsonl",
+  "accuracy_lenient": 0.24,
+  "accuracy_extracted": 0.216
+}

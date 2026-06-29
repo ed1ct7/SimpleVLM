@@ -1,0 +1,13 @@
+{
+  "model": "mine-8b",
+  "label": "Моя 8B",
+  "benchmark": "gqa",
+  "n": 1000,
+  "n_correct": 66,
+  "accuracy": 0.066,
+  "max_new_tokens": 16,
+  "seconds": 632.9,
+  "raw": "gqa__mine-8b.jsonl",
+  "accuracy_lenient": 0.301,
+  "accuracy_extracted": 0.286
+}
