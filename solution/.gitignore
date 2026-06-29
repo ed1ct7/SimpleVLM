@@ -1,0 +1,43 @@
+# --- Данные VK-VLM (НЕ коммитить: большие, лежат в WSL-ФС ~/vk-vlm-data) ---
+vk-vlm-data/
+**/vk-vlm-data/
+coco/
+**/coco/
+*.zip
+datasets/llava-instruct-ru/
+processed/
+hf-cache/
+# на случай локального симлинка/копии данных внутри solution/
+data/vk-vlm-data/
+data/coco/
+data/processed/
+
+# --- Чекпойнты / веса / адаптеры (публиковать на HF Hub, не в git) ---
+checkpoints/
+**/checkpoints/
+# промежуточные чекпойнты Trainer (адаптеры + optimizer state)
+**/checkpoint-*/
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.ckpt
+# крупный (~17 МБ) токенайзер — регенерируется из базовой модели
+tokenizer.json
+adapter_model/
+runs/
+wandb/
+
+# --- Python окружение / кэши ---
+.venv/
+venv/
+vk-vlm-env/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+.cache/
+
+# --- Прочее ---
+.DS_Store
+*.log
