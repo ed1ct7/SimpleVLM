@@ -1,0 +1,31 @@
+# VK-VLM — зафиксированный стек (WSL2 / Ubuntu 24.04 / Python 3.12, RTX 5080 sm_120).
+# Проверено check_gpu.py: CUDA available, sm_120, GPU matmul, bitsandbytes 4-bit — OK.
+#
+# ВАЖНО: torch/torchvision ставить ТОЛЬКО из cu128-индекса, иначе подтянется
+# CPU-сборка или сборка без ядер sm_120 (Blackwell) -> "no kernel image is available".
+#
+#   pip install torch==2.11.0 torchvision==0.26.0 --index-url https://download.pytorch.org/whl/cu128
+#   pip install -r requirements.txt
+#
+# Полный лок всех транзитивных зависимостей — см. pip-freeze-full.txt.
+
+# --- ядро (cu128, ставить через --index-url, см. выше) ---
+torch==2.11.0+cu128
+torchvision==0.26.0+cu128
+triton==3.6.0
+
+# --- ML-стек (Blackwell-совместимые версии) ---
+transformers==5.12.1
+trl==1.6.0
+peft==0.19.1
+bitsandbytes==0.49.2
+accelerate==1.14.0
+datasets==5.0.0
+pillow==12.2.0
+sentencepiece==0.2.1
+
+# --- ключевые транзитивные (зафиксированы для воспроизводимости) ---
+numpy==2.4.4
+huggingface-hub==1.20.1
+tokenizers==0.22.2
+safetensors==0.8.0
