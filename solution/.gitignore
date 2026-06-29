@@ -41,3 +41,6 @@ __pycache__/
 # --- Прочее ---
 .DS_Store
 *.log
+
+# Резервные копии БД (создаются admin.py backup)
+db/vk_vlm.backup-*.sqlite

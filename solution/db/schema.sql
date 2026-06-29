@@ -60,3 +60,22 @@ CREATE TABLE IF NOT EXISTS mmbench_prediction (
 CREATE INDEX IF NOT EXISTS ix_gqa_model    ON gqa_prediction(model_key);
 CREATE INDEX IF NOT EXISTS ix_mmb_model    ON mmbench_prediction(model_key);
 CREATE INDEX IF NOT EXISTS ix_mmb_category ON mmbench_prediction(category);
+
+-- Представления (VIEW) — инкапсулируют частые отчётные запросы
+DROP VIEW IF EXISTS v_leaderboard;
+CREATE VIEW v_leaderboard AS
+SELECT m.model_key, m.label, m.is_ours,
+       ROUND(g.accuracy_extracted*100, 2) AS gqa_extracted,
+       ROUND(g.accuracy*100, 2)           AS gqa_exact,
+       ROUND(b.accuracy*100, 2)           AS mmbench
+FROM model m
+LEFT JOIN eval_run g ON g.model_key = m.model_key AND g.benchmark = 'gqa'
+LEFT JOIN eval_run b ON b.model_key = m.model_key AND b.benchmark = 'mmbench';
+
+DROP VIEW IF EXISTS v_skill_accuracy;
+CREATE VIEW v_skill_accuracy AS
+SELECT model_key, category,
+       COUNT(*)                   AS n,
+       ROUND(AVG(correct)*100, 1) AS accuracy
+FROM mmbench_prediction
+GROUP BY model_key, category;
