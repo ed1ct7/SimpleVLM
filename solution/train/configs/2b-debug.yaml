@@ -1,0 +1,45 @@
+# Гиперпараметры отладочного прогона VK-VLM 2B (этап 03).
+# Цель — рабочий end-to-end цикл, НЕ метрика. Малая подвыборка + 1 эпоха.
+# Все поля переопределяются флагами CLI train.py (--subset, --epochs, --output-dir, ...).
+
+# --- компоненты VLM (параметризованы → переиспользуются в задаче 04) ---
+encoder_id: openai/clip-vit-large-patch14-336   # CLIP ViT-L/14, нативно 336px (CONTEXT §3, D6)
+llm_id: Qwen/Qwen2-1.5B-Instruct                 # открытая (Apache-2.0), мультиязычная, класс 2B
+                                                 # альт.: google/gemma-2-2b-it (нужен HF-токен, gated)
+image_size: 336                                  # CONTEXT: изображения 336px
+load_in_4bit: true                               # QLoRA: 4-bit база (bitsandbytes nf4) — D2
+attn_implementation: sdpa
+seed: 42
+output_dir: solution/model/2b-debug
+
+# --- LoRA / проектор ---
+lora:
+  r: 16
+  alpha: 32
+  dropout: 0.05
+  train_projector: true            # проектор обучается целиком (modules_to_save)
+  target_modules: [q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj]
+
+# --- обучение (под 16 ГБ VRAM) ---
+train:
+  subset: 2000                     # малая подвыборка для отладки (2–5k)
+  epochs: 1
+  max_steps: -1                    # -1 = по epochs; >0 — жёсткий лимит шагов
+  per_device_batch_size: 1         # micro-batch (VRAM)
+  grad_accum: 8                    # эфф. батч = 8
+  lr: 1.0e-4
+  lr_scheduler: cosine
+  warmup_ratio: 0.03
+  max_length: 1024                 # 576 image-токенов (в начале) + текст; режем справа.
+                                   # Жёсткий потолок активаций: при 2048 прогон входил в
+                                   # near-OOM thrash (15.9 ГБ, paged-optimizer пейджинг, ~20-30 с/шаг).
+  grad_checkpointing: true         # экономия VRAM
+  optim: paged_adamw_8bit          # 8-bit оптимизатор (bitsandbytes)
+  logging_steps: 5
+  save_strategy: "no"              # отладка: один финальный save_model (без checkpoint-XXX)
+  dataloader_workers: 2
+
+# --- данные (этап 02; WSL-ФС, не /mnt) ---
+data:
+  data_root: ~/vk-vlm-data
+  manifest: ~/vk-vlm-data/processed/llava_instruct_ru.jsonl

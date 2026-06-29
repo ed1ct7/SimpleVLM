@@ -1,0 +1,49 @@
+# VK-VLM 8B — СТАДИЯ 2 (instruction tuning). Рецепт LLaVA, CONTEXT §3, D1–D2.
+# Совместное дообучение проектора + LLM через QLoRA на инструкционных данных LLaVA-Instruct-ru.
+# Проектор стартует с выровненного (стадия 1, init_projector_from). assistant-only loss.
+#
+# Память: 4-bit Saiga (nf4) + LoRA + bf16 проектор + grad checkpointing + micro-batch=1 +
+# grad_accum. STATE 03: ~11–14 ГБ ожидаемо; seq-кэп + expandable_segments обязательны.
+
+encoder_id: openai/clip-vit-large-patch14-336
+llm_id: IlyaGusev/saiga_llama3_8b
+image_size: 336
+load_in_4bit: true                              # QLoRA: 4-bit база (bitsandbytes nf4) — D2
+attn_implementation: sdpa
+seed: 42
+stage: 2                                         # instruction tuning: QLoRA + проектор
+meta_init: true
+output_dir: solution/model/8b
+init_projector_from: solution/model/8b-stage1/projector.safetensors  # выровненный проектор (стадия 1)
+
+# LoRA на проекциях LLM; проектор обучается целиком (modules_to_save) и сохраняется с адаптерами
+lora:
+  r: 16
+  alpha: 32
+  dropout: 0.05
+  train_projector: true
+  target_modules: [q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj]
+
+train:
+  subset: 15000                  # фактический прогон (большой объём инструкций; ~8.4 с/шаг, ~2.2 ч).
+                                 # Полный объём: subset 109905 для финальной метрики (этап 05), в фоне.
+  epochs: 1
+  max_steps: -1
+  per_device_batch_size: 1       # micro-batch (VRAM-стена 16 ГБ)
+  grad_accum: 16                 # эфф. батч = 16
+  lr: 2.0e-4                     # LoRA instruction tuning
+  lr_scheduler: cosine
+  warmup_ratio: 0.03
+  max_length: 768                # 576 image-токенов + текст; жёсткий потолок активаций
+  mask_prompt: true              # assistant-only loss (учим отвечать, не повторять промпт)
+  grad_checkpointing: true
+  optim: paged_adamw_8bit
+  logging_steps: 10
+  save_strategy: steps           # PEFT → чекпойнт = только адаптеры (мало/быстро); resume через --resume
+  save_steps: 250
+  save_total_limit: 3
+  dataloader_workers: 4
+
+data:
+  data_root: ~/vk-vlm-data
+  manifest: ~/vk-vlm-data/processed/llava_instruct_ru.jsonl
